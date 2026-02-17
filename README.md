@@ -1,73 +1,202 @@
-# React + TypeScript + Vite
+# LeetCode Lab (personal workspace)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repo is my daily bridge between LeetCode and real code.  
+Every problem I solve becomes a tiny interactive demo I can run locally and revisit later. The goal isn’t a portfolio or a public library — it’s a place to *practice turning ideas into software* and to remember patterns without memorizing them.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Why I’m doing this
 
-## React Compiler
+LeetCode answers get accepted, then forgotten.  
+I want each problem to leave a concrete trace:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- a clean function
+- a small UI I can poke at
+- a short takeaway I understand next week
 
-## Expanding the ESLint configuration
+Over time this becomes my own reference manual for patterns (closure, two pointers, sliding window, BFS/DFS, DP, etc.).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Daily routine (keep it small)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Solve **1 LeetCode problem** (morning)
+2. Extract the idea into a pure function → `algo.ts`
+3. Wrap it with a tiny UI → `demo.tsx`
+4. (Optional) add tags/notes → `meta.ts`
+5. Refresh the app and interact with it for ~2–5 minutes
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Target: **5–10 minutes after solving**, not a second project.
+
+---
+
+## Run locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the local URL (usually http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The sidebar lists every demo automatically.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Adding a new day
+
+Create a folder using the date + slug:
+
 ```
+src/demos/YYYY-MM-DD-problem-slug/
+```
+
+Example:
+
+```
+src/demos/2026-02-18-valid-parentheses/
+```
+
+### Required files
+
+**algo.ts** — pure logic only (no React, no DOM)
+
+```ts
+export function isValid(s: string): boolean {
+  // solution
+}
+```
+
+**demo.tsx** — minimal inputs + output display
+
+The UI should only demonstrate behavior, not be fancy.
+
+### Optional
+
+**meta.ts**
+
+```ts
+export const meta = {
+  title: "Valid Parentheses",
+  date: "2026-02-18",
+  tags: ["stack"]
+};
+```
+
+The app auto‑loads any folder containing `demo.tsx`.
+No registry editing.
+
+---
+
+## Conventions I’m following
+
+### 1) Keep algorithms pure
+
+`algo.ts` must not import React or touch the DOM.
+
+Good:
+```
+input -> function -> output
+```
+
+Bad:
+```
+function manipulates UI or state directly
+```
+
+---
+
+### 2) TypeScript rules (important)
+
+Always type parameters and return values.
+
+Use:
+```
+unknown
+```
+when I intentionally ignore input.
+
+Avoid:
+```
+any
+```
+
+Examples:
+
+```ts
+(...args: unknown[]) => string
+```
+
+```ts
+function twoSum(nums: number[], target: number): number[] | null
+```
+
+---
+
+### 3) Demo size guideline
+
+Most demos should be:
+
+- 1–2 inputs
+- 1 output
+- 1 sentence takeaway
+
+No animation unless it helps understanding.
+
+---
+
+## Pattern tags I’ll reuse
+
+arrays  
+hashmap  
+two-pointers  
+sliding-window  
+stack  
+binary-search  
+bfs  
+dfs  
+heap  
+greedy  
+dynamic-programming  
+backtracking  
+union-find  
+trie  
+closure
+
+Keep vocabulary consistent so I can filter later.
+
+---
+
+## Input notes
+
+Some demos parse free‑form text. Bare words should be treated as strings so I don’t need quotes.
+
+Example input:
+```
+1, hello, true, [1,2,3]
+```
+
+---
+
+## What I’m actually practicing
+
+Not algorithms — *translation*:
+
+problem → idea → function → module → UI
+
+If I can explain a solution through a working demo, I actually understand it.
+
+---
+
+## Future ideas (optional, not required)
+
+- grid visualizer for BFS/DFS
+- binary search pointer visualization
+- sliding window highlighter
+- retry old problems weekly
+- generator script for new folders
+
+---
+
+This repo is a notebook I can run.
+
