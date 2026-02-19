@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createHelloWorld } from "./algo";
-import styles from "./Demo.module.css";
+import styles from "./demo.module.css";
 
 export default function Demo() {
   const [input, setInput] = useState<string>("");
