@@ -1,0 +1,86 @@
+/* Demo.module.css */
+
+.container {
+  display: grid;
+  gap: 20px;
+  max-width: 900px;
+}
+
+.header {
+  display: grid;
+  gap: 6px;
+}
+
+.title {
+  margin: 0;
+}
+
+.subtle {
+  margin-top: 6px;
+  color: #666;
+}
+
+.label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+}
+
+.card {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+.resultCard {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+}
+
+.result {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 18px;
+}
+
+.pre {
+  background: #f6f8fa;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+.explain {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Side-by-side only for the counter comparison demo */
+.comparisonContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 860px) {
+  .comparisonContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+}

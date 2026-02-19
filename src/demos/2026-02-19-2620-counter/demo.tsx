@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createCounter } from "./algo";
+import styles from "./Demo.module.css";
 
 export default function Demo() {
   const [input, setInput] = useState<string>("");
-  const [counterFn, setCounterFn] = useState<(() => number) | null>(null);
-  const [output, setOutput] = useState<number | null>(null);
 
-  // Step 1 — create closure
+  // Closure counter
+  const [counterFn, setCounterFn] = useState<(() => number) | null>(null);
+  const [closureOutput, setClosureOutput] = useState<number | null>(null);
+
+  // Regular React counter
+  const [regularCount, setRegularCount] = useState<number | null>(null);
+
   const handleCreate = () => {
     const n = Number(input);
 
@@ -15,114 +20,85 @@ export default function Demo() {
       return;
     }
 
-    const fn = createCounter(n); // <-- CLOSURE CREATED HERE
+    const fn = createCounter(n);
     setCounterFn(() => fn);
-    setOutput(null);
+    setClosureOutput(null);
+
+    setRegularCount(n);
   };
 
-  // Step 2 — call closure repeatedly
-  const handleIncrement = () => {
+  const handleClosureIncrement = () => {
     if (!counterFn) return;
+    setClosureOutput(counterFn());
+  };
 
-    const result = counterFn(); // closure remembers n
-    setOutput(result);
+  const handleRegularIncrement = () => {
+    if (regularCount === null) return;
+    setRegularCount((prev) => (prev ?? 0) + 1);
   };
 
   return (
-    <div style={{ display: "grid", gap: 14 }}>
-      <div>
-        <h2 style={{ margin: 0 }}>Closure Counter Demo</h2>
-        <div style={{ marginTop: 6, color: "#666" }}>
-          Pattern: <b>Closure</b>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Closure vs Regular Counter</h2>
       </div>
 
-      <div style={card}>
-        <b>What this problem teaches</b>
-        <ul style={{ marginTop: 8 }}>
-          <li>A function remembers variables from where it was created</li>
-          <li>
-            The inner function still has access to n after createCounter
-            finishes
-          </li>
-          <li>Closures create persistent memory without React state</li>
-          <li>The value lives in JavaScript memory, not React</li>
-        </ul>
-      </div>
-
-      <label style={label}>
+      <label className={styles.label}>
         Enter initial number:
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          style={inputStyle}
+          className={styles.input}
           placeholder="example: 777"
         />
       </label>
 
-      <button onClick={handleCreate}>Create Counter</button>
-
-      <button onClick={handleIncrement} disabled={!counterFn}>
-        Increment
+      <button className="btn btn-primary" onClick={handleCreate}>
+        Create Counters
       </button>
 
-      <div style={card}>
-        <b>Typed value:</b>
-        <p>{input}</p>
-      </div>
+      <div className={styles.comparisonContainer}>
+        <div className={styles.card}>
+          <h3>Closure Counter</h3>
 
-      <div style={resultCard}>
-        <div style={{ fontSize: 14 }}>Returned value:</div>
-        <div style={result}>{output !== null ? output : "No calls yet"}</div>
-        <div style={{ marginTop: 8, color: "#666" }}>
-          The counter value lives inside the closure, not inside React state.
+          <button
+            className="btn btn-secondary"
+            onClick={handleClosureIncrement}
+            disabled={!counterFn}
+          >
+            Increment (Closure)
+          </button>
+
+          <div className={styles.result}>
+            {closureOutput !== null ? closureOutput : "No calls yet"}
+          </div>
+
+          <p className={styles.explain}>
+            Value lives inside JavaScript closure memory. Not stored in React
+            state.
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3>React State Counter</h3>
+
+          <button
+            className="btn btn-secondary"
+            onClick={handleRegularIncrement}
+            disabled={regularCount === null}
+          >
+            Increment (State)
+          </button>
+
+          <div className={styles.result}>
+            {regularCount !== null ? regularCount : "Not initialized"}
+          </div>
+
+          <p className={styles.explain}>
+            Value lives in React state. Triggers re-render on every update.
+          </p>
         </div>
       </div>
     </div>
   );
 }
-
-const label: React.CSSProperties = {
-  display: "grid",
-  gap: 6,
-  fontSize: 13,
-};
-
-const inputStyle: React.CSSProperties = {
-  padding: "10px 12px",
-  borderRadius: 10,
-  border: "1px solid #ddd",
-  outline: "none",
-  fontSize: 14,
-};
-
-const card: React.CSSProperties = {
-  padding: 12,
-  borderRadius: 12,
-  border: "1px solid #eee",
-  background: "#fafafa",
-};
-
-const resultCard: React.CSSProperties = {
-  padding: 14,
-  borderRadius: 12,
-  border: "1px solid #dcdcdc",
-  background: "#ffffff",
-};
-
-const result: React.CSSProperties = {
-  marginTop: 8,
-  padding: 10,
-  borderRadius: 8,
-  background: "#f1f5f9",
-  fontFamily: "monospace",
-  fontSize: 18,
-};
-
-const pre: React.CSSProperties = {
-  background: "#f6f8fa",
-  padding: 10,
-  borderRadius: 8,
-  overflowX: "auto",
-  fontSize: 12,
-};
